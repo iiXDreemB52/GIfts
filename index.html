@@ -558,6 +558,65 @@ nav {
 .platform-btn.sel { border-color: var(--accent); background: rgba(139,92,246,0.15); }
 .platform-btn span { display: block; font-size: 10px; color: var(--text3); margin-top: 4px; }
 
+/* ─── PLATFORM SELECTOR (join page) ─── */
+.plat-btn { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 6px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 18px; user-select: none; }
+.plat-btn:hover { border-color: var(--border2); background: rgba(139,92,246,0.08); }
+.plat-btn.sel { border-color: var(--accent); background: rgba(139,92,246,0.18); }
+.plat-btn span { display: block; font-size: 10px; color: var(--text3); margin-top: 3px; }
+.plat-btn.sel span { color: var(--accent3); }
+
+/* ─── TASK BUILDER (create page) ─── */
+.task-builder-row {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.task-builder-row-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.task-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(139,92,246,0.2); color: var(--accent2); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.task-row-title { font-size: 13px; font-weight: 600; color: var(--text2); flex: 1; }
+.task-remove-btn { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+.task-remove-btn:hover { color: var(--red); background: rgba(239,68,68,0.1); }
+.task-builder-fields { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 8px; }
+
+/* ─── REQUIREMENTS CHECKLIST ─── */
+.req-item { display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+.req-item.done { color: var(--green); }
+.req-item.done::before { content: '✅'; }
+.req-item:not(.done)::before { content: '⬜'; }
+
+/* ─── DYNAMIC TASKS (detail page) ─── */
+.dyn-task {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.22s;
+  user-select: none;
+}
+.dyn-task:hover { border-color: var(--border2); }
+.dyn-task.done { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.05); }
+.dyn-task-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--bg3); flex-shrink: 0; }
+.dyn-task-info { flex: 1; min-width: 0; }
+.dyn-task-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.dyn-task-link { font-size: 12px; color: var(--accent2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none; display: block; }
+.dyn-task-link:hover { text-decoration: underline; }
+.dyn-task-check {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  color: transparent;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.dyn-task.done .dyn-task-check { background: var(--green); border-color: var(--green); color: #fff; }
+
 /* ─── NOTIFICATION ─── */
 .notif {
   position: fixed; bottom: 24px; right: 24px;
@@ -721,73 +780,79 @@ nav {
   </div>
 
   <div class="tasks-section">
-    <div class="tasks-title">✅ المهام المطلوبة قبل المشاركة</div>
-    <div class="task-item" id="task-1">
-      <div class="task-icon">📸</div>
-      <div class="task-info">
-        <div class="task-name">تابع حساب الإنستقرام</div>
-        <div class="task-type">@gaming.sa</div>
+    <!-- progress bar -->
+    <div id="task-progress-wrap" style="margin-bottom:1.2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text2);">إكمال المهام</div>
+        <div style="font-size:13px;font-weight:700;color:var(--accent2);" id="task-progress-label">0 / 0</div>
       </div>
-      <div class="task-check" onclick="toggleTask(1)">✓</div>
-    </div>
-    <div class="task-item" id="task-2">
-      <div class="task-icon">💬</div>
-      <div class="task-info">
-        <div class="task-name">انضم لسيرفر الديسكورد</div>
-        <div class="task-type">discord.gg/gamers-sa</div>
+      <div class="progress-bar" style="height:6px;">
+        <div class="progress-fill" id="task-progress-fill" style="width:0%;transition:width 0.4s ease;"></div>
       </div>
-      <div class="task-check" onclick="toggleTask(2)">✓</div>
     </div>
-    <div class="task-item" id="task-3">
-      <div class="task-icon">▶️</div>
-      <div class="task-info">
-        <div class="task-name">اشترك بالقناة على يوتيوب</div>
-        <div class="task-type">youtube.com/gamers-sa</div>
-      </div>
-      <div class="task-check" onclick="toggleTask(3)">✓</div>
-    </div>
+    <div id="detail-tasks-list"></div>
   </div>
 
   <div class="join-section">
     <div class="join-card">
       <div class="join-title">🎟️ سجّل مشاركتك</div>
+
       <div class="form-group">
-        <label class="form-label">اسمك الكامل</label>
-        <input class="form-input" type="text" placeholder="مثال: محمد أحمد">
+        <label class="form-label">اسمك الكامل <span style="color:var(--red)">*</span></label>
+        <input class="form-input" id="join-name" type="text" placeholder="مثال: محمد أحمد" oninput="validateJoin()">
+        <div id="join-name-err" style="display:none;font-size:11px;color:var(--red);margin-top:4px;">يرجى إدخال اسمك</div>
       </div>
+
       <div class="form-group">
-        <label class="form-label">طريقة التواصل الأساسية</label>
-        <div class="form-row">
-          <select class="form-select" id="contact-type">
-            <option>إنستقرام</option>
-            <option>واتساب</option>
-            <option>تيليجرام</option>
-            <option>ديسكورد</option>
-            <option>سناب شات</option>
-            <option>تيك توك</option>
-            <option>تويتر / X</option>
+        <label class="form-label">طريقة التواصل الأساسية <span style="color:var(--red)">*</span></label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;" id="platform-selector">
+          <div class="plat-btn" data-plat="instagram" onclick="selectPlatform(this)">📸<span>إنستقرام</span></div>
+          <div class="plat-btn" data-plat="discord" onclick="selectPlatform(this)">💬<span>ديسكورد</span></div>
+          <div class="plat-btn" data-plat="whatsapp" onclick="selectPlatform(this)">📱<span>واتساب</span></div>
+          <div class="plat-btn" data-plat="telegram" onclick="selectPlatform(this)">✈️<span>تيليجرام</span></div>
+          <div class="plat-btn" data-plat="snapchat" onclick="selectPlatform(this)">👻<span>سناب</span></div>
+          <div class="plat-btn" data-plat="tiktok" onclick="selectPlatform(this)">🎵<span>تيك توك</span></div>
+          <div class="plat-btn" data-plat="twitter" onclick="selectPlatform(this)">🐦<span>تويتر</span></div>
+          <div class="plat-btn" data-plat="youtube" onclick="selectPlatform(this)">▶️<span>يوتيوب</span></div>
+        </div>
+        <input class="form-input" id="join-contact" type="text" placeholder="@username أو رابط الحساب" oninput="validateJoin()" style="display:none;">
+        <div id="join-contact-err" style="display:none;font-size:11px;color:var(--red);margin-top:4px;">يرجى إدخال معلومات التواصل</div>
+        <div id="join-plat-err" style="display:none;font-size:11px;color:var(--red);margin-top:4px;">يرجى اختيار منصة التواصل</div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">تواصل احتياطي <span style="color:var(--text3);font-size:11px;">(اختياري)</span></label>
+        <div style="display:grid;grid-template-columns:140px 1fr;gap:8px;">
+          <select class="form-select" id="join-backup-plat">
+            <option value="">— اختر —</option>
+            <option value="whatsapp">📱 واتساب</option>
+            <option value="telegram">✈️ تيليجرام</option>
+            <option value="instagram">📸 إنستقرام</option>
+            <option value="discord">💬 ديسكورد</option>
+            <option value="snapchat">👻 سناب</option>
           </select>
-          <input class="form-input" type="text" placeholder="@username">
+          <input class="form-input" id="join-backup-contact" type="text" placeholder="@username">
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">طريقة تواصل احتياطية (اختياري)</label>
-        <div class="form-row">
-          <select class="form-select">
-            <option>واتساب</option>
-            <option>تيليجرام</option>
-            <option>إنستقرام</option>
-          </select>
-          <input class="form-input" type="text" placeholder="@username">
-        </div>
+
+      <!-- duplicate warning -->
+      <div id="join-dup-err" style="display:none;margin-top:12px;padding:10px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-sm);font-size:13px;color:var(--red);">⛔ هذا الحساب شارك مسبقاً في هذا السحب</div>
+
+      <!-- requirements checklist summary -->
+      <div id="join-requirements" style="margin-top:14px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--text3);display:flex;flex-direction:column;gap:5px;">
+        <div id="req-name" class="req-item">⬜ أدخل اسمك</div>
+        <div id="req-plat" class="req-item">⬜ اختر منصة التواصل</div>
+        <div id="req-contact" class="req-item">⬜ أدخل معلومات التواصل</div>
+        <div id="req-tasks" class="req-item">⬜ أكمل جميع المهام</div>
       </div>
-      <button class="btn btn-purple" style="width:100%;justify-content:center;margin-top:6px;" onclick="joinGiveaway()">🚀 مشاركة الآن</button>
+
+      <button class="btn btn-purple" id="join-btn" style="width:100%;justify-content:center;margin-top:14px;opacity:0.4;cursor:not-allowed;" onclick="joinGiveaway()" disabled>🔒 أكمل جميع الخطوات أولاً</button>
     </div>
   </div>
 
   <div style="text-align:center;padding:0 2rem 3rem;">
     <button class="btn btn-outline btn-sm" onclick="showPage('home')">← العودة للرئيسية</button>
-    <button class="btn btn-outline btn-sm" style="margin-right:8px" onclick="showPage('dashboard')">⚙️ لوحة التحكم (صاحب السحب)</button>
+    <button class="btn btn-outline btn-sm" style="margin-right:8px" onclick="showPage('dashboard')">⚙️ لوحة التحكم</button>
   </div>
 </div>
 
@@ -935,26 +1000,27 @@ nav {
         <div class="form-section-title">المعلومات الأساسية</div>
         <div class="form-group">
           <label class="form-label">عنوان السحب</label>
-          <input class="form-input" type="text" placeholder="مثال: سحب على بلايستيشن 5">
+          <input class="form-input" id="create-title" type="text" placeholder="مثال: سحب على بلايستيشن 5" oninput="validateCreate()">
         </div>
         <div class="form-group">
           <label class="form-label">وصف السحب</label>
-          <textarea class="form-input form-textarea" placeholder="اكتب وصفاً جذاباً لسحبك..."></textarea>
+          <textarea class="form-input form-textarea" id="create-desc" placeholder="اكتب وصفاً جذاباً لسحبك..." oninput="validateCreate()"></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">الجائزة</label>
-          <input class="form-input" type="text" placeholder="مثال: PS5 Standard Edition">
+          <input class="form-input" id="create-prize" type="text" placeholder="مثال: PS5 Standard Edition" oninput="validateCreate()">
         </div>
         <div class="form-grid">
           <div class="form-group" style="margin-bottom:0">
             <label class="form-label">عدد الفائزين</label>
-            <input class="form-input" type="number" min="1" value="1" placeholder="1">
+            <input class="form-input" id="create-winners" type="number" min="1" value="1" oninput="validateCreate()">
           </div>
           <div class="form-group" style="margin-bottom:0">
             <label class="form-label">رمز السحب (إيموجي)</label>
-            <input class="form-input" type="text" placeholder="🎮" maxlength="4">
+            <input class="form-input" id="create-emoji" type="text" placeholder="🎮" maxlength="4">
           </div>
         </div>
+        <div id="create-basic-error" style="display:none;color:var(--red);font-size:12px;margin-top:8px;padding:8px 12px;background:rgba(239,68,68,0.08);border-radius:var(--radius-sm);border:1px solid rgba(239,68,68,0.2);"></div>
       </div>
 
       <div class="form-section">
@@ -962,40 +1028,26 @@ nav {
         <div class="form-grid">
           <div class="form-group" style="margin-bottom:0">
             <label class="form-label">تاريخ الانتهاء</label>
-            <input class="form-input" type="date">
+            <input class="form-input" id="create-date" type="date" oninput="validateCreate()">
           </div>
           <div class="form-group" style="margin-bottom:0">
             <label class="form-label">وقت الانتهاء</label>
-            <input class="form-input" type="time">
+            <input class="form-input" id="create-time" type="time" oninput="validateCreate()">
           </div>
         </div>
       </div>
 
       <div class="form-section">
         <div class="form-section-title">مهام المشاركة</div>
-        <div class="form-group">
-          <label class="form-label">أضف مهمة (رابط أو وصف)</label>
-          <input class="form-input" type="text" placeholder="مثال: تابع حساب @username على الإنستقرام">
-        </div>
-        <div class="form-group">
-          <label class="form-label">منصات التواصل المطلوبة</label>
-          <div class="platform-grid">
-            <div class="platform-btn sel" onclick="this.classList.toggle('sel')">📸<span>إنستقرام</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">💬<span>ديسكورد</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">📱<span>واتساب</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">✈️<span>تيليجرام</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">👻<span>سناب</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">🎵<span>تيك توك</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">🐦<span>تويتر</span></div>
-            <div class="platform-btn" onclick="this.classList.toggle('sel')">▶️<span>يوتيوب</span></div>
-          </div>
-        </div>
+        <div id="tasks-builder"></div>
+        <button type="button" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;margin-top:6px;" onclick="addTaskRow()">+ إضافة مهمة جديدة</button>
+        <div id="tasks-error" style="display:none;color:var(--red);font-size:12px;margin-top:8px;padding:8px 12px;background:rgba(239,68,68,0.08);border-radius:var(--radius-sm);border:1px solid rgba(239,68,68,0.2);">⚠️ أضف مهمة واحدة على الأقل</div>
       </div>
 
       <div class="form-section">
         <div class="form-section-title">شروط إضافية</div>
         <div class="form-group" style="margin-bottom:0">
-          <textarea class="form-input form-textarea" placeholder="أضف أي شروط أو تعليمات إضافية للمشاركة..."></textarea>
+          <textarea class="form-input form-textarea" id="create-terms" placeholder="أضف أي شروط أو تعليمات إضافية للمشاركة..."></textarea>
         </div>
       </div>
 
@@ -1102,26 +1154,83 @@ nav {
 </div>
 
 <script>
-// ─── DATA ───
-const giveaways = [
-  { id:1, emoji:'🎮', title:'سحب على بلايستيشن 5', prize:'PS5 Standard Edition', cat:'gaming', participants:3241, views:8920, winners:1, days:2, hours:14, mins:33, progress:65 },
-  { id:2, emoji:'💵', title:'سحب نقدي 500 ريال', prize:'500 ريال سعودي', cat:'cash', participants:7508, views:19340, winners:2, days:0, hours:6, mins:45, progress:88 },
-  { id:3, emoji:'📱', title:'سحب آيفون 15 برو', prize:'iPhone 15 Pro 256GB', cat:'tech', participants:15200, views:42000, winners:1, days:4, hours:2, mins:15, progress:42 },
-  { id:4, emoji:'🎁', title:'سحب كارت هدية 300 ريال', prize:'كارت هدية أمازون 300 ريال', cat:'gift', participants:4820, views:11200, winners:3, days:1, hours:18, mins:22, progress:72 },
-  { id:5, emoji:'⌚', title:'سحب ساعة Samsung Galaxy', prize:'Samsung Galaxy Watch 6', cat:'tech', participants:9340, views:25100, winners:1, days:3, hours:9, mins:10, progress:55 },
-  { id:6, emoji:'🖥️', title:'سحب شاشة جيمنج', prize:'Monitor Gaming 27" 165Hz', cat:'gaming', participants:6710, views:17800, winners:1, days:5, hours:22, mins:50, progress:30 },
-];
+// ═══════════════════════════════════════════════
+//  DATABASE (in-memory, simulates backend store)
+// ═══════════════════════════════════════════════
+const DB = {
+  giveaways: [
+    {
+      id: 1, emoji: '🎮', title: 'سحب على بلايستيشن 5',
+      desc: 'سحب حصري على جهاز PS5 الجديد! شارك الآن وحظك يوصلك.',
+      prize: 'PS5 Standard Edition', cat: 'gaming',
+      participants: 3241, views: 8920, winnersCount: 1,
+      days: 2, hours: 14, mins: 33, progress: 65,
+      tasks: [
+        { id: 't1', platform: 'instagram', name: 'تابع حساب الإنستقرام', link: 'https://instagram.com/gaming.sa' },
+        { id: 't2', platform: 'discord',   name: 'انضم لسيرفر الديسكورد',  link: 'https://discord.gg/gamers-sa' },
+        { id: 't3', platform: 'youtube',   name: 'اشترك بالقناة',          link: 'https://youtube.com/gamers-sa' },
+      ],
+      participants_list: [
+        { name: 'أحمد خالد',   platform: 'instagram', contact: '@ahmed.kh',        time: 'منذ 3 دقائق' },
+        { name: 'سارة العمري', platform: 'discord',   contact: 'sara#1234',         time: 'منذ 7 دقائق' },
+        { name: 'محمد الرشيد', platform: 'telegram',  contact: '@m_rasheed',        time: 'منذ 12 دقيقة' },
+        { name: 'لمى الشهري',  platform: 'whatsapp',  contact: '+966501234567',     time: 'منذ 18 دقيقة' },
+        { name: 'فهد المطيري', platform: 'twitter',   contact: '@fahad_m',          time: 'منذ 25 دقيقة' },
+      ]
+    },
+    { id: 2, emoji: '💵', title: 'سحب نقدي 500 ريال',    desc: 'سحب نقدي مباشر على 500 ريال لشخصين محظوظين!', prize: '500 ريال سعودي', cat: 'cash',   participants: 7508, views: 19340, winnersCount: 2, days: 0, hours: 6, mins: 45, progress: 88, tasks: [{ id: 't1', platform: 'twitter', name: 'تابع حساب تويتر', link: 'https://x.com/example' }], participants_list: [] },
+    { id: 3, emoji: '📱', title: 'سحب آيفون 15 برو',     desc: 'فرصتك تفوز بآيفون 15 Pro 256GB بمجرد إكمال المهام.', prize: 'iPhone 15 Pro 256GB', cat: 'tech',  participants: 15200, views: 42000, winnersCount: 1, days: 4, hours: 2, mins: 15, progress: 42, tasks: [{ id: 't1', platform: 'instagram', name: 'تابع الحساب', link: 'https://instagram.com/tech.sa' }, { id: 't2', platform: 'tiktok', name: 'تابع التيك توك', link: 'https://tiktok.com/@tech.sa' }], participants_list: [] },
+    { id: 4, emoji: '🎁', title: 'كارت هدية 300 ريال',   desc: 'ثلاثة فائزين بكارت هدية أمازون 300 ريال.', prize: 'كارت هدية أمازون 300 ريال', cat: 'gift', participants: 4820, views: 11200, winnersCount: 3, days: 1, hours: 18, mins: 22, progress: 72, tasks: [{ id: 't1', platform: 'snapchat', name: 'تابع السناب', link: 'https://snapchat.com/add/store.sa' }], participants_list: [] },
+    { id: 5, emoji: '⌚', title: 'ساعة Samsung Galaxy',  desc: 'فوز بساعة Samsung Galaxy Watch 6 الذكية.', prize: 'Samsung Galaxy Watch 6', cat: 'tech', participants: 9340, views: 25100, winnersCount: 1, days: 3, hours: 9, mins: 10, progress: 55, tasks: [{ id: 't1', platform: 'youtube', name: 'اشترك في القناة', link: 'https://youtube.com/tech' }, { id: 't2', platform: 'instagram', name: 'تابع الإنستقرام', link: 'https://instagram.com/tech' }, { id: 't3', platform: 'telegram', name: 'انضم للقناة', link: 'https://t.me/techcommunity' }], participants_list: [] },
+    { id: 6, emoji: '🖥️', title: 'شاشة جيمنج 27 بوصة', desc: 'شاشة Gaming 27 بوصة 165Hz للفائز المحظوظ.', prize: 'Monitor Gaming 27" 165Hz', cat: 'gaming', participants: 6710, views: 17800, winnersCount: 1, days: 5, hours: 22, mins: 50, progress: 30, tasks: [{ id: 't1', platform: 'discord', name: 'انضم لسيرفر الديسكورد', link: 'https://discord.gg/gamers' }], participants_list: [] },
+  ],
+  nextId: 7
+};
 
-let currentFilter = 'all';
+const PLATFORM_META = {
+  instagram: { emoji: '📸', label: 'إنستقرام' },
+  discord:   { emoji: '💬', label: 'ديسكورد' },
+  whatsapp:  { emoji: '📱', label: 'واتساب' },
+  telegram:  { emoji: '✈️', label: 'تيليجرام' },
+  snapchat:  { emoji: '👻', label: 'سناب شات' },
+  tiktok:    { emoji: '🎵', label: 'تيك توك' },
+  twitter:   { emoji: '🐦', label: 'تويتر' },
+  youtube:   { emoji: '▶️', label: 'يوتيوب' },
+};
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentGiveawayId = 1;
+let tasksDone = {};          // { taskId: bool } for current detail view
+let selectedPlatform = '';
+let taskCounter = 0;         // for create page task rows
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════
+//  HOME — RENDER CARDS
+// ═══════════════════════════════════════════════
+function bannerBg(cat) {
+  const m = { gaming: 'linear-gradient(135deg,#1a1040,#2d1b6e)', tech: 'linear-gradient(135deg,#0c1a3a,#1b3a6e)', cash: 'linear-gradient(135deg,#0a2010,#1a4020)', gift: 'linear-gradient(135deg,#2a0a1a,#5a1a3a)' };
+  return m[cat] || 'linear-gradient(135deg,#1a1040,#2d1b6e)';
+}
 
 function renderCards(filter) {
   const grid = document.getElementById('giveaway-grid');
-  const filtered = filter === 'all' ? giveaways : giveaways.filter(g => g.cat === filter);
-  grid.innerHTML = filtered.map(g => `
+  if (!grid) return;
+  const list = filter === 'all' ? DB.giveaways : DB.giveaways.filter(g => g.cat === filter);
+  grid.innerHTML = list.map(g => `
     <div class="giveaway-card" onclick="openDetail(${g.id})">
       <div class="card-banner" style="background:${bannerBg(g.cat)}">
-        ${g.emoji}
-        <div class="card-status status-active">نشط</div>
+        ${g.emoji}<div class="card-status status-active">نشط</div>
       </div>
       <div class="card-body">
         <div class="card-title">${g.title}</div>
@@ -1134,113 +1243,416 @@ function renderCards(filter) {
         <div class="card-meta">
           <div class="meta-item">👥 ${g.participants.toLocaleString()} مشارك</div>
           <div class="meta-item">👁️ ${g.views.toLocaleString()} زيارة</div>
-          <div class="meta-item">🏆 فائز ${g.winners}</div>
+          <div class="meta-item">🏆 فائز ${g.winnersCount}</div>
         </div>
         <div class="progress-wrap">
           <div class="progress-bar"><div class="progress-fill" style="width:${g.progress}%"></div></div>
-          <div class="progress-label"><span>${g.progress}% من المشاركة الكاملة</span><span>${g.progress}%</span></div>
+          <div class="progress-label"><span>${g.tasks.length} مهمة مطلوبة</span><span>${g.progress}%</span></div>
         </div>
       </div>
     </div>
   `).join('');
 }
 
-function bannerBg(cat) {
-  const m = { gaming:'linear-gradient(135deg,#1a1040,#2d1b6e)', tech:'linear-gradient(135deg,#0c1a3a,#1b3a6e)', cash:'linear-gradient(135deg,#0a2010,#1a4020)', gift:'linear-gradient(135deg,#2a0a1a,#5a1a3a)' };
-  return m[cat] || 'linear-gradient(135deg,#1a1040,#2d1b6e)';
-}
-
 function filterCards(el, cat) {
   document.querySelectorAll('.filter-tags .tag').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  currentFilter = cat;
   renderCards(cat);
 }
 
+// ═══════════════════════════════════════════════
+//  DETAIL PAGE — OPEN & RENDER
+// ═══════════════════════════════════════════════
 function openDetail(id) {
-  const g = giveaways.find(x => x.id === id);
+  currentGiveawayId = id;
+  tasksDone = {};
+  selectedPlatform = '';
+
+  const g = DB.giveaways.find(x => x.id === id);
   if (!g) return;
+
+  // hero
   document.getElementById('detail-emoji').textContent = g.emoji;
   document.getElementById('detail-title').textContent = g.title;
+  document.getElementById('detail-desc').textContent = g.desc;
   document.getElementById('detail-prize').textContent = g.prize;
   document.getElementById('detail-participants').textContent = g.participants.toLocaleString();
-  document.getElementById('detail-views').textContent = g.views.toLocaleString();
-  document.getElementById('detail-winners-count').textContent = g.winners;
+  document.getElementById('detail-views').textContent = (g.views + 1).toLocaleString();
+  document.getElementById('detail-winners-count').textContent = g.winnersCount;
   document.getElementById('gcd-d').textContent = String(g.days).padStart(2,'0');
   document.getElementById('gcd-h').textContent = String(g.hours).padStart(2,'0');
   document.getElementById('gcd-m').textContent = String(g.mins).padStart(2,'0');
+
+  // render tasks
+  renderDetailTasks(g.tasks);
+
+  // reset join form
+  document.getElementById('join-name').value = '';
+  document.getElementById('join-contact').value = '';
+  document.getElementById('join-contact').style.display = 'none';
+  document.getElementById('join-backup-contact').value = '';
+  document.getElementById('join-backup-plat').value = '';
+  document.getElementById('join-dup-err').style.display = 'none';
+  document.querySelectorAll('.plat-btn').forEach(b => b.classList.remove('sel'));
+
+  validateJoin();
   showPage('detail');
 }
 
-// ─── PAGES ───
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function renderDetailTasks(tasks) {
+  const list = document.getElementById('detail-tasks-list');
+  if (!list) return;
+  list.innerHTML = tasks.map(t => {
+    const pm = PLATFORM_META[t.platform] || { emoji: '🔗', label: t.platform };
+    return `
+      <div class="dyn-task" id="dt-${t.id}" onclick="toggleDetailTask('${t.id}', ${tasks.length})">
+        <div class="dyn-task-icon">${pm.emoji}</div>
+        <div class="dyn-task-info">
+          <div class="dyn-task-name">${t.name}</div>
+          <a class="dyn-task-link" href="${t.link}" target="_blank" onclick="event.stopPropagation()">🔗 ${t.link}</a>
+        </div>
+        <div class="dyn-task-check" id="dc-${t.id}">✓</div>
+      </div>
+    `;
+  }).join('') || '<div style="color:var(--text3);font-size:14px;padding:12px 0;">لا توجد مهام محددة لهذا السحب.</div>';
+  updateTaskProgress(tasks.length);
 }
 
-// ─── TASKS ───
-const taskDone = {};
-function toggleTask(id) {
-  taskDone[id] = !taskDone[id];
-  const item = document.getElementById('task-' + id);
-  const check = item.querySelector('.task-check');
-  if (taskDone[id]) {
-    item.classList.add('done');
-    check.classList.add('checked');
-    check.textContent = '✓';
-  } else {
-    item.classList.remove('done');
-    check.classList.remove('checked');
-    check.textContent = '✓';
+function toggleDetailTask(taskId, total) {
+  tasksDone[taskId] = !tasksDone[taskId];
+  const row = document.getElementById('dt-' + taskId);
+  const check = document.getElementById('dc-' + taskId);
+  if (tasksDone[taskId]) { row.classList.add('done'); check.style.color = '#fff'; }
+  else { row.classList.remove('done'); check.style.color = 'transparent'; }
+  updateTaskProgress(total);
+  validateJoin();
+}
+
+function updateTaskProgress(total) {
+  const done = Object.values(tasksDone).filter(Boolean).length;
+  const pct = total === 0 ? 100 : Math.round((done / total) * 100);
+  const fill = document.getElementById('task-progress-fill');
+  const label = document.getElementById('task-progress-label');
+  if (fill) fill.style.width = pct + '%';
+  if (label) label.textContent = done + ' / ' + total;
+}
+
+// ═══════════════════════════════════════════════
+//  JOIN FORM — PLATFORM SELECTOR
+// ═══════════════════════════════════════════════
+function selectPlatform(el) {
+  document.querySelectorAll('.plat-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedPlatform = el.dataset.plat;
+  const contactInput = document.getElementById('join-contact');
+  const pm = PLATFORM_META[selectedPlatform] || {};
+  contactInput.style.display = 'block';
+  contactInput.placeholder = selectedPlatform === 'whatsapp' ? '+966xxxxxxxxx' : '@username';
+  contactInput.focus();
+  document.getElementById('join-plat-err').style.display = 'none';
+  validateJoin();
+}
+
+// ═══════════════════════════════════════════════
+//  JOIN FORM — VALIDATION
+// ═══════════════════════════════════════════════
+function validateJoin() {
+  const g = DB.giveaways.find(x => x.id === currentGiveawayId);
+  const totalTasks = g ? g.tasks.length : 0;
+  const doneTasks  = Object.values(tasksDone).filter(Boolean).length;
+  const allTasksDone = totalTasks === 0 || doneTasks >= totalTasks;
+
+  const nameVal    = (document.getElementById('join-name')?.value || '').trim();
+  const contactVal = (document.getElementById('join-contact')?.value || '').trim();
+  const hasPlatform = !!selectedPlatform;
+  const hasContact  = contactVal.length >= 2;
+  const hasName     = nameVal.length >= 2;
+
+  // requirement pills
+  setReq('req-name',    hasName,     'أدخل اسمك');
+  setReq('req-plat',    hasPlatform, 'اختر منصة التواصل');
+  setReq('req-contact', hasContact,  'أدخل معلومات التواصل');
+  setReq('req-tasks',   allTasksDone, totalTasks > 0 ? `أكمل جميع المهام (${doneTasks}/${totalTasks})` : 'لا توجد مهام مطلوبة ✓');
+
+  const ready = hasName && hasPlatform && hasContact && allTasksDone;
+  const btn = document.getElementById('join-btn');
+  if (btn) {
+    btn.disabled = !ready;
+    btn.style.opacity = ready ? '1' : '0.4';
+    btn.style.cursor  = ready ? 'pointer' : 'not-allowed';
+    btn.textContent   = ready ? '🚀 مشاركة الآن' : '🔒 أكمل جميع الخطوات أولاً';
   }
+  return ready;
 }
 
-// ─── JOIN ───
+function setReq(id, done, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'req-item' + (done ? ' done' : '');
+  el.textContent = label;
+}
+
+// ═══════════════════════════════════════════════
+//  JOIN FORM — SUBMIT
+// ═══════════════════════════════════════════════
 function joinGiveaway() {
-  document.getElementById('modal-rank').textContent = (3241 + Math.floor(Math.random()*10)).toLocaleString();
+  if (!validateJoin()) return;
+
+  const name    = document.getElementById('join-name').value.trim();
+  const contact = document.getElementById('join-contact').value.trim();
+  const g = DB.giveaways.find(x => x.id === currentGiveawayId);
+
+  // duplicate check
+  const dup = g.participants_list.some(
+    p => p.platform === selectedPlatform && p.contact.toLowerCase() === contact.toLowerCase()
+  );
+  if (dup) {
+    document.getElementById('join-dup-err').style.display = 'block';
+    document.getElementById('join-btn').disabled = true;
+    return;
+  }
+  document.getElementById('join-dup-err').style.display = 'none';
+
+  // save to DB
+  g.participants++;
+  g.participants_list.push({ name, platform: selectedPlatform, contact, time: 'الآن' });
+
+  // show success modal
+  document.getElementById('modal-rank').textContent = g.participants.toLocaleString();
+  document.getElementById('modal-winpct').textContent = ((g.winnersCount / g.participants) * 100).toFixed(2) + '%';
   document.getElementById('join-modal').classList.add('open');
+
+  // disable button so can't re-submit
+  const btn = document.getElementById('join-btn');
+  btn.disabled = true;
+  btn.style.opacity = '0.4';
+  btn.textContent = '✅ تم تسجيل مشاركتك';
 }
 
-// ─── CREATE ───
+// ═══════════════════════════════════════════════
+//  CREATE PAGE — TASK BUILDER
+// ═══════════════════════════════════════════════
+const createTasks = []; // { uid, platform, name, link }
+
+function addTaskRow() {
+  taskCounter++;
+  const uid = 'cr' + taskCounter;
+  createTasks.push({ uid, platform: '', name: '', link: '' });
+  renderTaskBuilder();
+}
+
+function removeTaskRow(uid) {
+  const i = createTasks.findIndex(t => t.uid === uid);
+  if (i !== -1) createTasks.splice(i, 1);
+  renderTaskBuilder();
+}
+
+function renderTaskBuilder() {
+  const wrap = document.getElementById('tasks-builder');
+  if (!wrap) return;
+  wrap.innerHTML = createTasks.map((t, idx) => `
+    <div class="task-builder-row">
+      <div class="task-builder-row-header">
+        <div class="task-num">${idx + 1}</div>
+        <div class="task-row-title">مهمة ${idx + 1}</div>
+        <button class="task-remove-btn" onclick="removeTaskRow('${t.uid}')" title="حذف المهمة">×</button>
+      </div>
+      <div class="task-builder-fields">
+        <select class="form-select" onchange="updateCreateTask('${t.uid}','platform',this.value)">
+          <option value="">المنصة</option>
+          ${Object.entries(PLATFORM_META).map(([k,v]) => `<option value="${k}" ${t.platform===k?'selected':''}>${v.emoji} ${v.label}</option>`).join('')}
+        </select>
+        <input class="form-input" type="text" placeholder="اسم المهمة" value="${t.name}" oninput="updateCreateTask('${t.uid}','name',this.value)">
+        <input class="form-input" type="url" placeholder="https://رابط المهمة" value="${t.link}" oninput="updateCreateTask('${t.uid}','link',this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateCreateTask(uid, field, val) {
+  const t = createTasks.find(x => x.uid === uid);
+  if (t) t[field] = val.trim();
+}
+
+// ═══════════════════════════════════════════════
+//  CREATE PAGE — VALIDATION & SUBMIT
+// ═══════════════════════════════════════════════
+function validateCreate() {
+  // basic live feedback (non-blocking)
+}
+
 function createGiveaway() {
+  const title   = (document.getElementById('create-title')?.value || '').trim();
+  const desc    = (document.getElementById('create-desc')?.value  || '').trim();
+  const prize   = (document.getElementById('create-prize')?.value || '').trim();
+  const winners = parseInt(document.getElementById('create-winners')?.value || '1');
+  const emoji   = (document.getElementById('create-emoji')?.value || '').trim() || '🎁';
+  const dateVal = document.getElementById('create-date')?.value;
+  const timeVal = document.getElementById('create-time')?.value;
+
+  const errEl = document.getElementById('create-basic-error');
+  const taskErrEl = document.getElementById('tasks-error');
+
+  // field validation
+  const errors = [];
+  if (!title)   errors.push('عنوان السحب مطلوب');
+  if (!prize)   errors.push('الجائزة مطلوبة');
+  if (!dateVal) errors.push('تاريخ الانتهاء مطلوب');
+  if (!timeVal) errors.push('وقت الانتهاء مطلوب');
+
+  if (errors.length > 0) {
+    errEl.textContent = '⚠️ ' + errors.join(' — ');
+    errEl.style.display = 'block';
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  errEl.style.display = 'none';
+
+  // tasks validation
+  const validTasks = createTasks.filter(t => t.platform && t.name && t.link);
+  if (createTasks.length === 0 || validTasks.length < createTasks.length) {
+    taskErrEl.style.display = 'block';
+    const incomplete = createTasks.filter(t => !(t.platform && t.name && t.link));
+    taskErrEl.textContent = '⚠️ ' + (createTasks.length === 0 ? 'أضف مهمة واحدة على الأقل' : `${incomplete.length} مهمة غير مكتملة — أكمل جميع الحقول`);
+    taskErrEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  taskErrEl.style.display = 'none';
+
+  // build end date countdown
+  const end = new Date(dateVal + 'T' + timeVal);
+  const now = new Date();
+  const diff = Math.max(0, end - now);
+  const dDays  = Math.floor(diff / 86400000);
+  const dHours = Math.floor((diff % 86400000) / 3600000);
+  const dMins  = Math.floor((diff % 3600000) / 60000);
+
+  // save
+  const newG = {
+    id: DB.nextId++,
+    emoji, title, desc, prize,
+    cat: 'gift',
+    participants: 0, views: 0,
+    winnersCount: winners,
+    days: dDays, hours: dHours, mins: dMins,
+    progress: 0,
+    tasks: validTasks.map((t, i) => ({ id: 't' + (i+1), platform: t.platform, name: t.name, link: t.link })),
+    participants_list: []
+  };
+  DB.giveaways.unshift(newG);
+
+  // reset create form
+  createTasks.length = 0;
+  taskCounter = 0;
+  renderTaskBuilder();
+  ['create-title','create-desc','create-prize','create-terms'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  if (document.getElementById('create-winners')) document.getElementById('create-winners').value = '1';
+  if (document.getElementById('create-emoji'))   document.getElementById('create-emoji').value = '';
+
   notify('✅', 'تم إنشاء السحب بنجاح!');
-  setTimeout(() => showPage('detail'), 800);
+  setTimeout(() => { renderCards('all'); openDetail(newG.id); }, 600);
 }
 
-// ─── WINNERS ───
-function pickWinners() {
-  document.getElementById('win-modal').classList.add('open');
+// ═══════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════
+function openDashboard() {
+  const g = DB.giveaways.find(x => x.id === currentGiveawayId);
+  if (!g) return;
+  renderDashboardTable(g);
+  showPage('dashboard');
 }
 
-// ─── ADMIN ACTIONS ───
-function deleteRow(btn) {
-  btn.closest('.table-row').style.opacity = '0';
-  setTimeout(() => btn.closest('.table-row').remove(), 300);
-  notify('🗑️', 'تم حذف المشارك');
+function renderDashboardTable(g) {
+  const wrap = document.getElementById('dash-table-body');
+  if (!wrap) return;
+  if (g.participants_list.length === 0) {
+    wrap.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text3);font-size:14px;">لا يوجد مشاركون بعد</div>`;
+    return;
+  }
+  wrap.innerHTML = g.participants_list.map((p, i) => {
+    const pm = PLATFORM_META[p.platform] || { emoji: '🔗', label: p.platform };
+    return `
+      <div class="table-row" id="dash-row-${i}">
+        <div class="td name">${p.name}</div>
+        <div class="td">${pm.emoji} ${pm.label}</div>
+        <div class="td">${p.contact}</div>
+        <div class="td">${p.time}</div>
+        <div class="td"><button class="del-btn" onclick="deleteParticipant(${i})">×</button></div>
+      </div>
+    `;
+  }).join('');
+  // update stats
+  document.querySelectorAll('.dash-stat-num')[0].textContent = g.participants.toLocaleString();
+  document.querySelectorAll('.dash-stat-num')[1].textContent = g.views.toLocaleString();
+  document.querySelectorAll('.dash-stat-num')[2].textContent = g.participants > 0 ? Math.round((g.participants/g.views)*100) + '%' : '0%';
 }
+
+function deleteParticipant(idx) {
+  const g = DB.giveaways.find(x => x.id === currentGiveawayId);
+  if (!g) return;
+  const row = document.getElementById('dash-row-' + idx);
+  if (row) { row.style.opacity = '0'; row.style.transition = 'opacity 0.3s'; }
+  setTimeout(() => {
+    g.participants_list.splice(idx, 1);
+    g.participants = Math.max(0, g.participants - 1);
+    renderDashboardTable(g);
+    notify('🗑️', 'تم حذف المشارك');
+  }, 300);
+}
+
+function deleteRow(btn) { btn.closest('.table-row').remove(); notify('🗑️', 'تم حذف المشارك'); }
 
 function cancelGiveaway() {
   if (confirm('هل أنت متأكد من إلغاء السحب؟ لا يمكن التراجع عن هذا القرار.')) {
+    const i = DB.giveaways.findIndex(x => x.id === currentGiveawayId);
+    if (i !== -1) DB.giveaways.splice(i, 1);
+    renderCards('all');
     notify('⛔', 'تم إلغاء السحب');
-    setTimeout(() => showPage('past'), 1000);
+    setTimeout(() => showPage('past'), 900);
   }
 }
 
 function endGiveaway() {
-  if (confirm('هل تريد إنهاء السحب الآن واختيار الفائزين؟')) {
-    pickWinners();
-  }
+  if (confirm('هل تريد إنهاء السحب الآن واختيار الفائزين؟')) pickWinners();
+}
+
+function pickWinners() {
+  const g = DB.giveaways.find(x => x.id === currentGiveawayId);
+  const pool = g ? g.participants_list : [];
+  const modal = document.getElementById('win-modal');
+  const content = document.getElementById('win-winner-content');
+  if (pool.length === 0) { notify('⚠️', 'لا يوجد مشاركون بعد'); return; }
+  const winnerIdx = Math.floor(Math.random() * pool.length);
+  const w = pool[winnerIdx];
+  const pm = PLATFORM_META[w.platform] || { emoji: '🔗', label: w.platform };
+  const initials = w.name.trim().split(' ').map(p => p[0]).slice(0,2).join('');
+  content.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="avatar" style="background:#312e81;color:#a5b4fc;width:44px;height:44px;font-size:15px;">${initials}</div>
+      <div>
+        <div style="font-size:16px;font-weight:700;">${w.name}</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:2px;">${pm.emoji} ${pm.label}: ${w.contact}</div>
+      </div>
+      <div style="margin-right:auto;font-size:24px;">🏆</div>
+    </div>
+  `;
+  modal.classList.add('open');
 }
 
 function endDelivery() {
   if (confirm('هل تأكدت من تسليم الجائزة؟ سيتم إغلاق المحادثة وأرشفة السحب.')) {
     notify('✅', 'تم إنهاء السحب وأرشفته');
-    setTimeout(() => showPage('past'), 1000);
+    setTimeout(() => showPage('past'), 900);
   }
 }
 
-// ─── CHAT ───
+// ═══════════════════════════════════════════════
+//  CHAT
+// ═══════════════════════════════════════════════
 function sendMsg() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
@@ -1254,7 +1666,6 @@ function sendMsg() {
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   input.value = '';
-
   setTimeout(() => {
     const replies = ['حسناً فاهم! 👍', 'شكراً على التواصل', 'سنتابع معك قريباً', 'تم الاستلام ✅'];
     const r = document.createElement('div');
@@ -1265,16 +1676,17 @@ function sendMsg() {
   }, 1200);
 }
 
-// ─── MODALS ───
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
-
+// ═══════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
 });
 
-// ─── NOTIFICATIONS ───
+// ═══════════════════════════════════════════════
+//  NOTIFICATIONS
+// ═══════════════════════════════════════════════
 let notifTimer;
 function notify(icon, text) {
   const el = document.getElementById('notif');
@@ -1282,28 +1694,34 @@ function notify(icon, text) {
   document.getElementById('notif-text').textContent = text;
   el.classList.add('show');
   clearTimeout(notifTimer);
-  notifTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 3200);
 }
 
-// ─── COUNTDOWN TICKER ───
+// ═══════════════════════════════════════════════
+//  COUNTDOWN TICKER
+// ═══════════════════════════════════════════════
 let secs = 7;
 setInterval(() => {
-  secs--;
-  if (secs < 0) secs = 59;
+  secs = (secs - 1 + 60) % 60;
   const s = document.getElementById('gcd-s');
   if (s) s.textContent = String(secs).padStart(2,'0');
 }, 1000);
 
-// ─── LIVE STATS ───
+// ═══════════════════════════════════════════════
+//  LIVE STATS TICKER
+// ═══════════════════════════════════════════════
 setInterval(() => {
   const v = document.getElementById('total-visitors');
   const p = document.getElementById('total-participations');
-  if (v) v.textContent = (18342 + Math.floor(Math.random()*10)).toLocaleString();
-  if (p) p.textContent = (94817 + Math.floor(Math.random()*5)).toLocaleString();
+  if (v) v.textContent = (18342 + Math.floor(Math.random()*12)).toLocaleString();
+  if (p) p.textContent = (94817 + Math.floor(Math.random()*6)).toLocaleString();
 }, 3000);
 
-// ─── INIT ───
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
 renderCards('all');
+addTaskRow(); // start with 1 empty task row on create page
 </script>
 </body>
 </html>
